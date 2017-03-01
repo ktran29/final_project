@@ -15,3 +15,9 @@ lat <- gsub("\\(", "", lat)
 lng <- gsub(")", "", lng)
 
 collision.data <- mutate(collision.data, "Latitude" = as.numeric(lat), "Longitude" = as.numeric(lng))
+
+server <- function(input, output)  {
+  
+}
+
+shinyServer(server)
