@@ -15,10 +15,9 @@ collision.data <- mutate(collision.data, "Latitude" = as.numeric(lat), "Longitud
   select(ADDRTYPE, COLLISIONTYPE, DISTANCE, INATTENTIONIND, INCDTTM, INJURIES, JUNCTIONTYPE, 
          LIGHTCOND, LOCATION, PERSONCOUNT, ROADCOND, SDOT_COLDESC, SEVERITYDESC, ST_COLDESC, 
          VEHCOUNT, WEATHER, Latitude, Longitude)
-collision.data <- collision.data[complete.cases(collision.data["Latitude"]),]
-collision.data <- collision.data[complete.cases(collision.data["Longitude"]),]
-collision.data <- collision.data[complete.cases(collision.data["COLLISIONTYPE"]),]
 
+collision.data$INATTENTIONIND[is.na(collision.data$INATTENTIONIND)] <- "N" 
+collision.data <- na.omit(collision.data)
 
 ballard.limits <- list(upper.lng = -122.360702, upper.lat = 47.690566, lower.lng = -122.410012, lower.lat = 47.655839)
 phinney.ridge.limits <- list(upper.lng = -122.344423, upper.lat = 47.686954, lower.lng = -122.366053, lower.lat = 47.662190)
@@ -72,7 +71,6 @@ queen.anne.data <- collision.data %>%
 capitol.hill.data <- collision.data %>% 
   filter(Longitude < capitol.hill.limits$upper.lng & Longitude > capitol.hill.limits$lower.lng) %>% 
   filter(Latitude < capitol.hill.limits$upper.lat & Latitude > capitol.hill.limits$lower.lat)
-
 
 
 
