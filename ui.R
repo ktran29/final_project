@@ -5,7 +5,14 @@ ui <- fluidPage(
   titlePanel("Seattle Collision Data"),
   sidebarLayout(
     sidebarPanel(
-      checkboxInput("test", "Test", TRUE)
+      checkboxGroupInput("inattention",
+                         "Inattentive Driving",
+                         c("Yes" = "yes",
+                           "No" = "no"),
+                         c("yes", "no")),
+      checkboxInput("year",
+                    "Sort By Year",
+                    FALSE)
     ),
     mainPanel(
       tabsetPanel(type = "tabs",
