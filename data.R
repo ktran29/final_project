@@ -39,6 +39,8 @@ magnolia.limits <- list(upper.lng = -122.393264, upper.lat = 47.661892, lower.ln
 queen.anne.limits <- list(upper.lng = -122.356687, upper.lat = 47.644524, lower.lng = -122.373650, lower.lat = 47.637816)
 capitol.hill.limits <- list(upper.lng = -122.318215, upper.lat = 47.629830, lower.lng = -122.321305, lower.lat = 47.621153)
 
+raining <- 
+
 ballard.data <- collision.data %>% 
   filter(Longitude < ballard.limits$upper.lng & Longitude > ballard.limits$lower.lng) %>% 
   filter(Latitude < ballard.limits$upper.lat & Latitude > ballard.limits$lower.lat)

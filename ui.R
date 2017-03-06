@@ -12,6 +12,9 @@ ui <- fluidPage(
                          c("yes", "no")),
       checkboxInput("year",
                     "Sort By Year",
+                    FALSE),
+      checkboxInput("raining",
+                    "Check for rain",
                     FALSE)
     ),
     mainPanel(
