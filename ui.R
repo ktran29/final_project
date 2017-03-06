@@ -13,10 +13,9 @@ ui <- fluidPage(
       checkboxInput("year",
                     "Sort By Year",
                     FALSE),
-      checkboxInput("raining",
-                    "Check for rain",
-                    FALSE),
-      h3("toggles:"),
+      #sliderInput("hour", "time of day", min=, max=4, value=2, step=.1),
+
+      h3("filters:"),
       selectInput("roadcond",
                   "road condition",
                   choices = c("Off", "Dry", "Wet", "Snow/Slush", "Unknown", "Ice", "Sand/Mud/Dirt", "Other", "Oil", "Standing Water")

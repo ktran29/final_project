@@ -86,7 +86,7 @@ neighborhood.lat <- c(47.677, 47.674167, 47.6505, 47.690612, 47.655, 47.680278, 
                       47.650556, 47.637222, 47.622942)
 neighborhood <- c("Ballard", "Phinney Ridge", "Fremont", "Greenwood", "University District", "Green Lake", 
                   "Northgate", "Magnolia", "Queen Anne", "Capitol Hill")
-count <- c(nrow(ballard.data)/5, nrow(phinney.ridge.data)/3, nrow(fremont.data)/3, nrow(greenwood.data)/3, 
-           nrow(university.district.data)/4, nrow(green.lake.data)/3, nrow(northgate.data)/4, nrow(magnolia.data),
-           nrow(queen.anne.data), nrow(capitol.hill.data))
+#count <- c(nrow(ballard.data)/5, nrow(phinney.ridge.data)/3, nrow(fremont.data)/3, nrow(greenwood.data)/3, 
+           #nrow(university.district.data)/4, nrow(green.lake.data)/3, nrow(northgate.data)/4, nrow(magnolia.data),
+           #nrow(queen.anne.data), nrow(capitol.hill.data))
 
