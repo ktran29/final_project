@@ -34,16 +34,6 @@ shinyServer(function(input, output)  {
     
     current.group <- "Overview"
     
-    
-    #for loop through all the cities.
-    #for loop through all of the state.variable.properties.
-    #sigh.
-    #well.. maybe per city is necessary, ^ to not break up the structuring for plotting to the map
-    #
-    #still need a state variable i think
-    #or just many of them? and the reactive function just observes them all.
-    
-    
     if(!is.null(clicks$map.click) & is.null(clicks$shape.click)) {
       map <- map %>% hideGroup(current.group) %>% showGroup("Overview") %>%
         setView(-122.339220, 47.677622, 12)
@@ -56,93 +46,16 @@ shinyServer(function(input, output)  {
     return(map)
   })
   
-  data.disp <- reactive({
-    #dummy <- input$raining
-    
-    
-    
-    #print(input$raining)
-    
-    #ret <- if(input$raining) collision.data %>% 
-        #filter(Longitude < fremont.limits$upper.lng & Longitude > fremont.limits$lower.lng) %>% 
-        #filter(Latitude < fremont.limits$upper.lat & Latitude > fremont.limits$lower.lat) else 
-          #collision.data %>% 
-             #filter(Longitude < fremont.limits$upper.lng & Longitude > fremont.limits$lower.lng) %>% 
-             #filter(Latitude < fremont.limits$upper.lat & Latitude > fremont.limits$lower.lat) %>% 
-             #filter(WEATHER == "Raining")
-    
-    
-    #omg it works vvvv holy shit
-    #ret <- if(input$raining) (eval(parse(text = " collision.data %>% 
-#filter(Longitude < fremont.limits$upper.lng & Longitude > fremont.limits$lower.lng) %>% 
-                                  #  filter(Latitude < fremont.limits$upper.lat & Latitude > fremont.limits$lower.lat)"))) else 
-                                  #  (eval(parse(text = "collision.data %>% 
-                                  #  filter(Longitude < fremont.limits$upper.lng & Longitude > fremont.limits$lower.lng) %>% 
-                                  #  filter(Latitude < fremont.limits$upper.lat & Latitude > fremont.limits$lower.lat) %>% 
-                                  #  filter(WEATHER == 'Raining')")))
-    
-    #print(ret)
-    #print(all.equal(ret, fremont.data))
-    
-    #YESS WOW it works.
-    ret <- eval(parse(text = gen.string2("fremont")))
-    
-    return(ret)
-  })
-  
-  
-  #greenwood.disp <- reactive({
-    
-  #})
-  
-  fremont.disp <- reactive({
-    ret <- eval(parse(text = gen.string2("fremont")))
-    return(ret)
-  })
-  phinney.ridge.disp <- reactive({
-    ret <- eval(parse(text = gen.string2("phinney.ridge")))
-    return(ret)
-  })
-  ballard.disp <- reactive({
-    ret <- eval(parse(text = gen.string2("ballard")))
-    return(ret)
-  })
-  
-  greenwood.disp <- reactive({
-    ret <- eval(parse(text = gen.string2("greenwood")))
-    return(ret)
-  })
-  
-  university.district.disp <- reactive({
-    ret <- eval(parse(text = gen.string2("university.district")))
-    return(ret)
-  })
-  
-  green.lake.disp <- reactive({
-    ret <- eval(parse(text = gen.string2("green.lake")))
-    return(ret)
-  })
-  
-  queen.anne.disp <- reactive({
-    ret <- eval(parse(text = gen.string2("queen.anne")))
-    return(ret)
-  })
-  
-  magnolia.disp <- reactive({
-    ret <- eval(parse(text = gen.string2("magnolia")))
-    return(ret)
-  })
-  
-  northgate.disp <- reactive({
-    ret <- eval(parse(text = gen.string2("northgate")))
-    return(ret)
-  })
-  capitol.hill.disp <- reactive({
-    ret <- eval(parse(text = gen.string2("capitol.hill")))
-    return(ret)
-  })
-  
-
+  fremont.disp <- reactive({return(eval(parse(text = gen.string2("fremont"))))})
+  phinney.ridge.disp <- reactive({return(eval(parse(text = gen.string2("phinney.ridge"))))})
+  ballard.disp <- reactive({return(eval(parse(text = gen.string2("ballard"))))})
+  greenwood.disp <- reactive({return(eval(parse(text = gen.string2("greenwood"))))})
+  university.district.disp <- reactive({return(eval(parse(text = gen.string2("university.district"))))})
+  green.lake.disp <- reactive({return(eval(parse(text = gen.string2("green.lake"))))})
+  queen.anne.disp <- reactive({return(eval(parse(text = gen.string2("queen.anne"))))})
+  magnolia.disp <- reactive({return(eval(parse(text = gen.string2("magnolia"))))})
+  northgate.disp <- reactive({return(eval(parse(text = gen.string2("northgate"))))})
+  capitol.hill.disp <- reactive({return(eval(parse(text = gen.string2("capitol.hill"))))})
   
   gen.string2 <- function(city){
     #roadcond 
@@ -177,49 +90,8 @@ shinyServer(function(input, output)  {
     str <- paste(str, "%>%", sprintf("filter(Latitude < %1$s.limits$upper.lat & Latitude > %1$s.limits$lower.lat)", city))
     if(input$raining){str <- paste(str, "%>%", "filter(WEATHER == 'Raining')")}
     
-    #^ beautiful
-    #SHOULD NOW BACKUP THIS COMMIT THIS CODE AND THEN REMOVE THE FAT.
-    
-    #str <- sprintf("if(input$raining) collision.data %%>%%
-                     #filter(Longitude < %1$s.limits$upper.lng & Longitude > %1$s.limits$lower.lng) %%>%% 
-                     #filter(Latitude < %1$s.limits$upper.lat & Latitude > %1$s.limits$lower.lat) else 
-                     #collision.data %%>%% 
-                     #filter(Longitude < %1$s.limits$upper.lng & Longitude > %1$s.limits$lower.lng) %%>%% 
-                     #filter(Latitude < %1$s.limits$upper.lat & Latitude > %1$s.limits$lower.lat) %%>%% 
-                     #filter(WEATHER == 'Raining')", city)
     return(str)
   }
-  
-  #vv no.. this doesn't really work. parse can only generate one expression. not +2
-  #gen.string3 <- function(){
-   # return("if(TRUE){print('5')} if(TRUE){print('6')}")
-  #}
-  #print(eval(parse(text = gen.string3())))
-  
-  #OLD SHIT
-  #gen.string <- function(city){
-   # buildup <- sprintf("collision.data %%>%% filter(Longitude < %1$s.limits$upper.lng & Longitude > %1$s.limits$lower.lat)) else (collision.data %%>%% filter(Longitude < %1$s.limits$upper.lng & Longitude > %1$s.limits$lower.lng) %%>%% filter(Latitude < %1$s.limits$upper.lat & Latitude > %1$s.limits$lower.lat) %%>%% filter(WEATHER == 'Raining')", city)
-    
-   # print(buildup)
-#filter(Longitude < fremont.limits$upper.lng & Longitude > fremont.limits$lower.lng) %>% 
-#    filter(Latitude < fremont.limits$upper.lat & Latitude > fremont.limits$lower.lat)) else 
-#    (collision.data %>% 
-#    filter(Longitude < fremont.limits$upper.lng & Longitude > fremont.limits$lower.lng) %>% 
-#    filter(Latitude < fremont.limits$upper.lat & Latitude > fremont.limits$lower.lat) %>% 
-#    filter(WEATHER == 'Raining')"
-    
-    #return(buildup)
-  #}
-  
-  
-  
-  #gen.string.
-  #^ yeah. it works.
-  #i could have this function that generates the appropriate string that is precisely all the filtering necessary.
-  
-  #how do i keep this from being redundant for each city?
-  #this is really annoying
-  #
   
   clicks <- reactiveValues(map.click = NULL, shape.click = NULL)
   
@@ -228,34 +100,10 @@ shinyServer(function(input, output)  {
     clicks$map.click <- NULL
   })
   
-  
-  
   observeEvent(input$map_click, {
     clicks$map.click <- input$map_click
     clicks$shape.click <- NULL
   })
-  
-  
-  #data.disp <- reactive({
-    #dummy <- input$raining
-    #print(input$raining)
-   # ret <- if(input$raining) (collision.data %>% 
-                              #  filter(Longitude < fremont.limits$upper.lng & Longitude > fremont.limits$lower.lng) %>% 
-                              #  filter(Latitude < fremont.limits$upper.lat & Latitude > fremont.limits$lower.lat)) else 
-                              #    (collision.data %>% 
-                              #       filter(Longitude < fremont.limits$upper.lng & Longitude > fremont.limits$lower.lng) %>% 
-                              #       filter(Latitude < fremont.limits$upper.lat & Latitude > fremont.limits$lower.lat) %>% 
-                              #       filter(WEATHER == "Raining"))
-    #print(ret)
-    #print(all.equal(ret, fremont.data))
-  #  return(ret)
-  #})
-  
-  
-
-  
-  
-  
   
   showCollisionInfo <- function(collision, lat, lng) {
     selectedCollisions <- filter(collision.data, Latitude == lat, Longitude == lng)
