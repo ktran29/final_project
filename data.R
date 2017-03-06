@@ -1,32 +1,48 @@
 library(dplyr)
-#setwd("~/Dropbox/Classes/INFO201/Project/final_project")
+setwd("~/Dropbox/Classes/INFO201/Project/final_project")
 
 collision.data <- read.csv("./SDOT_Collisions.csv", stringsAsFactors = FALSE)
 collision.data[collision.data==""] <- NA
+collision.data$INATTENTIONIND[is.na(collision.data$INATTENTIONIND)] <- "N" 
 
 coordinates <- collision.data$Shape
-date <- collision.data$INCDATE
-
 lat <- sapply(strsplit(coordinates, split=", "), "[", 1)
 lng <- sapply(strsplit(coordinates, split=", "), "[", 2)
-
 lat <- gsub("\\(", "", lat)
 lng <- gsub(")", "", lng)
-
 lat <- signif(as.numeric(lat), 8)
 lng <- signif(as.numeric(lng), 8)
 
+date <- collision.data$INCDTTM
+time <- sapply(strsplit(date, split=" "), "[", 2)
+hour <- sapply(strsplit(time, split=":"), "[", 1)
+time.of.day <- sapply(strsplit(date, split=" "), "[", 3)
 date <- sapply(strsplit(date, split=" "), "[", 1)
 year <- sapply(strsplit(date, split="/"), "[", 3)
 
-collision.data <- mutate(collision.data, "Latitude" = lat, "Longitude" = lng, "Year" = year, "Date" = date) %>%
-  select(ADDRTYPE, COLLISIONTYPE, DISTANCE, INATTENTIONIND, INCDTTM, INJURIES, JUNCTIONTYPE, 
-         LIGHTCOND, LOCATION, PERSONCOUNT, ROADCOND, SDOT_COLDESC, SEVERITYDESC, ST_COLDESC, 
-         VEHCOUNT, WEATHER, Latitude, Longitude, Year, Date)
-
-collision.data$INATTENTIONIND[is.na(collision.data$INATTENTIONIND)] <- "N" 
+collision.data <- mutate(collision.data, "Latitude" = lat, "Longitude" = lng, "YEAR" = year, "DATE" = date,
+                         "TIME" = time, "HOUR" = hour, "TIME_OF_DAY" = time.of.day) %>% 
+  select(COLLISIONTYPE, FATALITIES, INATTENTIONIND, INJURIES, LIGHTCOND, LOCATION, PERSONCOUNT,
+         ROADCOND, SDOT_COLDESC, SEVERITYCODE, SEVERITYDESC, ST_COLDESC, UNDERINFL,
+         VEHCOUNT, WEATHER, Latitude, Longitude, DATE, YEAR, TIME, HOUR, TIME_OF_DAY)
+  
 collision.data <- na.omit(collision.data)
+
+hour <- as.numeric(collision.data$HOUR)
+time.of.day <- (collision.data$TIME_OF_DAY)
+time <- data.frame(time.of.day, hour, stringsAsFactors = FALSE)
+
+time <- within(time, hour[time.of.day == "PM"] <- hour[time.of.day == "PM"] + 12)
+
+hour <- time$hour
+minute <- sapply(strsplit(collision.data$TIME, split=":"), "[", 2)
+time <- paste0(hour, ":", minute)
+
+collision.data <- mutate(collision.data, "TIME" = time, "HOUR" = hour, "MINUTE" = minute)
+
 options(digits=16)
+
+
 
 ballard.limits <- list(upper.lng = -122.360702, upper.lat = 47.690566, lower.lng = -122.410012, lower.lat = 47.655839)
 phinney.ridge.limits <- list(upper.lng = -122.344423, upper.lat = 47.686954, lower.lng = -122.366053, lower.lat = 47.662190)
