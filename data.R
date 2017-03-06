@@ -1,6 +1,8 @@
 library(dplyr)
-#setwd("~/Dropbox/Classes/INFO201/Project/final_project")
+library(ggplot2)
+library(plotly)
 
+#setwd("~/Dropbox/Classes/INFO201/Project/final_project")
 collision.data <- read.csv("./SDOT_Collisions.csv", stringsAsFactors = FALSE)
 collision.data[collision.data==""] <- NA
 
@@ -21,7 +23,7 @@ year <- sapply(strsplit(date, split="/"), "[", 3)
 
 collision.data <- mutate(collision.data, "Latitude" = lat, "Longitude" = lng, "Year" = year, "Date" = date) %>%
   select(ADDRTYPE, COLLISIONTYPE, DISTANCE, INATTENTIONIND, INCDTTM, INJURIES, JUNCTIONTYPE, 
-         LIGHTCOND, LOCATION, PERSONCOUNT, ROADCOND, SDOT_COLDESC, SEVERITYDESC, ST_COLDESC, 
+         LIGHTCOND, LOCATION, PERSONCOUNT, ROADCOND, SDOT_COLDESC, SEVERITYCODE, SEVERITYDESC, ST_COLDESC, 
          VEHCOUNT, WEATHER, Latitude, Longitude, Year, Date)
 
 collision.data$INATTENTIONIND[is.na(collision.data$INATTENTIONIND)] <- "N" 
