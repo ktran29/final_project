@@ -2,7 +2,6 @@ library(dplyr)
 library(ggplot2)
 library(plotly)
 
-#setwd("~/Dropbox/Classes/INFO201/Project/final_project")
 collision.data <- read.csv("./SDOT_Collisions.csv", stringsAsFactors = FALSE)
 collision.data[collision.data==""] <- NA
 collision.data$INATTENTIONIND[is.na(collision.data$INATTENTIONIND)] <- "N" 
@@ -99,10 +98,10 @@ capitol.hill.data <- collision.data %>%
   filter(Longitude < capitol.hill.limits$upper.lng & Longitude > capitol.hill.limits$lower.lng) %>% 
   filter(Latitude < capitol.hill.limits$upper.lat & Latitude > capitol.hill.limits$lower.lat)
 
-neighborhood.lng <- c(-122.385, -122.359722, -122.3499, -122.3553, -122.303333, -122.327778, 
-                      -122.319167, -122.400833, -122.356944, -122.316456)
-neighborhood.lat <- c(47.677, 47.674167, 47.6505, 47.690612, 47.655, 47.680278, 
-                      47.6975, 47.650556, 47.637222, 47.622942)
+neighborhood.lng <- c(-122.385, -122.35438, -122.3499, -122.3553, -122.306158, -122.327778, 
+                      -122.316873, -122.400833, -122.356944, -122.316456)
+neighborhood.lat <- c(47.677, 47.672139, 47.6505, 47.690612, 47.661427, 47.680278, 
+                      47.695833, 47.650556, 47.637222, 47.622942)
 neighborhood <- c("Ballard", "Phinney Ridge", "Fremont", "Greenwood", "University District", "Green Lake", 
                   "Maple Leaf", "Magnolia", "Queen Anne", "Capitol Hill")
 
