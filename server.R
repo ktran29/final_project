@@ -65,11 +65,21 @@ shinyServer(function(input, output)  {
     if(!is.null(input$inattention)) {
       str <- paste(str, "& INATTENTIONIND %in% input$inattention")
     }
-    if(input$year == TRUE){
-      str <- paste(str, "& YEAR > input$year.slider[1] & YEAR < input$year.slider[2]")
-    }
-    if(input$hour == TRUE){
-      str <- paste(str, "& HOUR > input$hour.slider[1] & HOUR < input$hour.slider[2]")
+    output$years <- renderUI({})
+    output$hours <- renderUI({})
+    if(!is.null(input$time)) {
+      if(input$time[1] == 'year' | !is.na(input$time[2]) & input$time[2] == 'year'){
+        output$years <- renderUI({
+          sliderInput("year.slider", "Years", 2007, 2017, 2007:1)
+        })
+        str <- paste(str, "& YEAR > input$year.slider[1] & YEAR < input$year.slider[2]")
+      }
+      if(input$time[1] == 'hour' | !is.na(input$time[2]) & input$time[2] == 'hour'){
+        output$hours <- renderUI({
+          sliderInput("hour.slider", "Hours (24-hour Format)", 1, 24, 1:0)
+        })
+        str <- paste(str, "& HOUR > input$hour.slider[1] & HOUR < input$hour.slider[2]")
+      }
     }
     if(input$weather != "All"){str <- paste(str, "& WEATHER == input$weather")}
     if(input$roadcond != "All"){str <- paste(str, "& ROADCOND == input$roadcond")}
