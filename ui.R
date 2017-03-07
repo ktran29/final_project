@@ -7,10 +7,9 @@ shinyUI(
     tabPanel("Map",
       leafletOutput("map"),
       h3("Sort By:"),
-      checkboxGroupInput("inattention", "Inattentive Driving", c("Yes" = "Y", "No" = "N"), c("Y", "N")),
-      checkboxGroupInput("time", "Time", c("By Year" = "year", "By Hour" = "hour")),
-      uiOutput("years"),
-      uiOutput("hours"),
+      sliderInput("year.slider", "Years", 2007, 2017, c(2007, 2017)),
+      sliderInput("hour.slider", "Hours (24-hour Format)", 0, 23, c(0, 23)),
+      checkboxGroupInput("inattention", "Driving Attention", c("Attentive" = "N", "Inattentive" = "Y"), c("Y", "N")),
       selectInput("roadcond",
                   "Road Condition",
                   choices = c("All", "Dry", "Wet", "Snow/Slush", "Unknown", "Ice", "Sand/Mud/Dirt", "Other", "Oil", "Standing Water")
