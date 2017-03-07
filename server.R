@@ -62,8 +62,8 @@ shinyServer(function(input, output)  {
   filt <- function(city){
     str <- sprintf("%s.data", city)
     str <- paste(str, "%>%", "filter(TRUE")
-    str <- paste(str, "& YEAR > input$year.slider[1] & YEAR < input$year.slider[2]")
-    str <- paste(str, "& HOUR > input$hour.slider[1] & HOUR < input$hour.slider[2]")
+    str <- paste(str, "& YEAR >= input$year.slider[1] & YEAR <= input$year.slider[2]")
+    str <- paste(str, "& HOUR >= input$hour.slider[1] & HOUR <= input$hour.slider[2]")
     if(!is.null(input$inattention)) {
       str <- paste(str, "& INATTENTIONIND %in% input$inattention")
     }
