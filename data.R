@@ -1,6 +1,8 @@
 library(dplyr)
-#setwd("~/Dropbox/Classes/INFO201/Project/final_project")
+library(ggplot2)
+library(plotly)
 
+#setwd("~/Dropbox/Classes/INFO201/Project/final_project")
 collision.data <- read.csv("./SDOT_Collisions.csv", stringsAsFactors = FALSE)
 collision.data[collision.data==""] <- NA
 collision.data$INATTENTIONIND[is.na(collision.data$INATTENTIONIND)] <- "N" 

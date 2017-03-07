@@ -45,6 +45,19 @@ shinyServer(function(input, output)  {
     return(map)
   })
   
+  # MAKE A PLOT
+  output$plot <- renderPlotly({
+    p <- ggplot(data = collision.data, aes_string(x = input$conditions, fill = "SEVERITYCODE")) +
+      geom_bar() + 
+      labs(title = "How Many Collisions and Their Severity for Certain Conditions",
+           x = if(input$conditions == "ROADCOND") {"Road Conditions"} else if(input$conditions == "WEATHER"){"Weather"}
+                else {"Light Conditions"},
+           y = "Number of Collisions")
+    
+    p <- plotly_build(p)
+    return(p)
+  })
+  
   clicks <- reactiveValues(map.click = NULL, shape.click = NULL)
   
   observeEvent(input$map_shape_click, {
