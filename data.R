@@ -104,11 +104,11 @@ neighborhood <- c("Ballard", "Phinney Ridge", "Fremont", "Greenwood", "Universit
                   "Maple Leaf", "Magnolia", "Queen Anne", "Capitol Hill")
 
 size <- c(nrow(ballard.data)/5, nrow(phinney.ridge.data)/3, nrow(fremont.data)/3, nrow(greenwood.data)/3, 
-           nrow(university.district.data)/4, nrow(green.lake.data)/3, nrow(northgate.data)/4, nrow(magnolia.data),
+           nrow(university.district.data)/4, nrow(green.lake.data)/3, nrow(maple.leaf.data)/4, nrow(magnolia.data),
            nrow(queen.anne.data), nrow(capitol.hill.data))
 
 count <- c(nrow(ballard.data), nrow(phinney.ridge.data), nrow(fremont.data), nrow(greenwood.data), 
-          nrow(university.district.data), nrow(green.lake.data), nrow(northgate.data), nrow(magnolia.data),
+          nrow(university.district.data), nrow(green.lake.data), nrow(maple.leaf.data), nrow(magnolia.data),
           nrow(queen.anne.data), nrow(capitol.hill.data))
 
 neighborhood.data <- data.frame(neighborhood, count)

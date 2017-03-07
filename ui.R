@@ -6,7 +6,16 @@ shinyUI(
     tabPanel("Map",
       leafletOutput("map"),
       checkboxGroupInput("inattention", "Inattentive Driving", c("Yes" = "yes", "No" = "no"), c("yes", "no")),
-      checkboxInput("year", "Sort By Year", FALSE)
+      checkboxInput("year", "Sort By Year", FALSE),
+      conditionalPanel(
+        condition = "input.year",
+        sliderInput("year.slider",
+                    "Years",
+                    2007,
+                    2017,
+                    2007:1
+        )
+      )
     ),
     tabPanel("Chart")
   )

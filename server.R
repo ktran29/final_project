@@ -6,7 +6,6 @@ source('./data.R')
 shinyServer(function(input, output)  {
   
   output$map <- renderLeaflet({
-    
     map <- leaflet() %>% 
       addTiles() %>% 
       addCircles(neighborhood.lng, neighborhood.lat, size, neighborhood, "Overview", FALSE, fillOpacity = 0.5) %>%
@@ -59,7 +58,6 @@ shinyServer(function(input, output)  {
   })
   
   showCollisionInfo <- function(collision, lat, lng) {
-    print(collision)
     selectedCollisions <- filter(collision.data, Latitude == lat, Longitude == lng)
     selectedCollision <- sample_n(selectedCollisions, 1)
     content <- as.character(tagList(
@@ -74,11 +72,8 @@ shinyServer(function(input, output)  {
   }
   
   observe({
-    click <- NULL
-    hover <- NULL
     leafletProxy("map") %>% clearPopups()
     click <- input$map_marker_click
-    print(hover)
     if (!is.null(click)) {
       isolate({
         showCollisionInfo(click$id, click$lat, click$lng)
