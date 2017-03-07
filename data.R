@@ -58,6 +58,7 @@ magnolia.limits <- list(upper.lng = -122.393264, upper.lat = 47.661892, lower.ln
 queen.anne.limits <- list(upper.lng = -122.356687, upper.lat = 47.644524, lower.lng = -122.373650, lower.lat = 47.637816)
 capitol.hill.limits <- list(upper.lng = -122.318215, upper.lat = 47.629830, lower.lng = -122.321305, lower.lat = 47.621153)
 
+
 ballard.data <- collision.data %>% 
   filter(Longitude < ballard.limits$upper.lng & Longitude > ballard.limits$lower.lng) %>% 
   filter(Latitude < ballard.limits$upper.lat & Latitude > ballard.limits$lower.lat)
@@ -105,12 +106,8 @@ neighborhood.lat <- c(47.677, 47.674167, 47.6505, 47.690612, 47.655, 47.680278,
 neighborhood <- c("Ballard", "Phinney Ridge", "Fremont", "Greenwood", "University District", "Green Lake", 
                   "Maple Leaf", "Magnolia", "Queen Anne", "Capitol Hill")
 
-size <- c(nrow(ballard.data)/5, nrow(phinney.ridge.data)/3, nrow(fremont.data)/3, nrow(greenwood.data)/3, 
-           nrow(university.district.data)/4, nrow(green.lake.data)/3, nrow(maple.leaf.data)/4, nrow(magnolia.data),
-           nrow(queen.anne.data), nrow(capitol.hill.data))
-
-count <- c(nrow(ballard.data), nrow(phinney.ridge.data), nrow(fremont.data), nrow(greenwood.data), 
-          nrow(university.district.data), nrow(green.lake.data), nrow(maple.leaf.data), nrow(magnolia.data),
-          nrow(queen.anne.data), nrow(capitol.hill.data))
+# count <- c(nrow(ballard.data), nrow(phinney.ridge.data), nrow(fremont.data), nrow(greenwood.data), 
+#           nrow(university.district.data), nrow(green.lake.data), nrow(maple.leaf.data), nrow(magnolia.data),
+#           nrow(queen.anne.data), nrow(capitol.hill.data))
 
 neighborhood.data <- data.frame(neighborhood, count)

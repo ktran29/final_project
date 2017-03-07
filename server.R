@@ -8,43 +8,33 @@ shinyServer(function(input, output)  {
   output$map <- renderLeaflet({
     map <- leaflet() %>% 
       addTiles() %>% 
-      addCircles(neighborhood.lng, neighborhood.lat, size, neighborhood, "Overview", FALSE, fillOpacity = 0.5) %>%
-      addCircleMarkers(~Longitude, ~Latitude, 4, NULL, "Ballard", FALSE, data = ballard.data, fillOpacity = 0.3) %>% 
-      hideGroup("Ballard") %>% 
-      addCircleMarkers(~Longitude, ~Latitude, 4, NULL, "Phinney Ridge", FALSE, data = phinney.ridge.data, fillOpacity = 0.3) %>%  
-      hideGroup("Phinney Ridge") %>% 
-      addCircleMarkers(~Longitude, ~Latitude, 4, NULL, "Fremont", FALSE, data = fremont.data, fillOpacity = 0.3) %>% 
-      hideGroup("Fremont") %>% 
-      addCircleMarkers(~Longitude, ~Latitude, 4, NULL, "Greenwood", FALSE, data = greenwood.data, fillOpacity = 0.3) %>% 
-      hideGroup("Greenwood") %>% 
-      addCircleMarkers(~Longitude, ~Latitude, 4, NULL, "University District", FALSE, data = university.district.data, fillOpacity = 0.3) %>% 
-      hideGroup("University District") %>% 
-      addCircleMarkers(~Longitude, ~Latitude, 4, NULL, "Green Lake", FALSE, data = green.lake.data, fillOpacity = 0.3) %>% 
-      hideGroup("Green Lake") %>% 
-      addCircleMarkers(~Longitude, ~Latitude, 4, NULL, "Maple Leaf", FALSE, data = maple.leaf.data, fillOpacity = 0.3) %>% 
-      hideGroup("Maple Leaf") %>% 
-      addCircleMarkers(~Longitude, ~Latitude, 4, NULL, "Magnolia", FALSE, data = magnolia.data, fillOpacity = 0.3) %>%  
-      hideGroup("Magnolia") %>% 
-      addCircleMarkers(~Longitude, ~Latitude, 4, NULL, "Queen Anne", FALSE, data = queen.anne.data, fillOpacity = 0.3) %>%  
-      hideGroup("Queen Anne") %>% 
-      addCircleMarkers(~Longitude, ~Latitude, 4, NULL, "Capitol Hill", FALSE, data = capitol.hill.data, fillOpacity = 0.3) %>% 
-      hideGroup("Capitol Hill") %>% 
+      addCircles(neighborhood.lng, neighborhood.lat, 
+                 c(computeDiameter(nrow(ballard.disp())), computeDiameter(nrow(phinney.ridge.disp())), 
+                   computeDiameter(nrow(fremont.disp())), computeDiameter(nrow(greenwood.disp())), 
+                   computeDiameter(nrow(university.district.disp())), computeDiameter(nrow(green.lake.disp())), 
+                   computeDiameter(nrow(maple.leaf.disp())), computeDiameter(nrow(magnolia.disp())),
+                   computeDiameter(nrow(queen.anne.disp())), computeDiameter(nrow(capitol.hill.disp())))
+                 , neighborhood, "Overview", FALSE, fillOpacity = 0.5) %>%
       setView(-122.340098, 47.665702, 12)
     
-    current.group <- "Overview"
+    current.group <- "placeholder"
     
     if(!is.null(clicks$map.click) & is.null(clicks$shape.click)) {
-      map <- map %>% hideGroup(current.group) %>% showGroup("Overview") %>%
+      removeMarker(map, current.group)
+      map <- map %>% showGroup("Overview") %>% 
         setView(-122.340098, 47.665702, 12)
     } else if(!is.null(clicks$shape.click) & is.null(clicks$map.click)) {
       current.group <- clicks$shape.click$id
-      map <- map %>% hideGroup("Overview") %>% showGroup(current.group) %>% 
-        setView(lat = clicks$shape.click$lat, lng = clicks$shape.click$lng, zoom = 14)
+      
+      data.res <- eval(parse(text = paste0(gsub(" ", ".", tolower(current.group)), ".disp()")))
+      
+      map <- map %>% hideGroup("Overview") %>% addCircleMarkers(~Longitude, ~Latitude, 4, NULL, current.group, FALSE, data = data.res, fillOpacity = 0.3) %>% 
+          setView(lat = clicks$shape.click$lat, lng = clicks$shape.click$lng, zoom = 14) %>% showGroup(current.group)
     }
-    
     return(map)
   })
   
+
   # MAKE A PLOT
   output$plot <- renderPlotly({
     p <- ggplot(data = collision.data, aes_string(x = input$conditions, fill = "SEVERITYCODE")) +
@@ -57,6 +47,39 @@ shinyServer(function(input, output)  {
     p <- plotly_build(p)
     return(p)
   })
+
+  fremont.disp <- reactive({return(eval(parse(text = filt("fremont"))))})
+  phinney.ridge.disp <- reactive({return(eval(parse(text = filt("phinney.ridge"))))})
+  ballard.disp <- reactive({return(eval(parse(text = filt("ballard"))))})
+  greenwood.disp <- reactive({return(eval(parse(text = filt("greenwood"))))})
+  university.district.disp <- reactive({return(eval(parse(text = filt("university.district"))))})
+  green.lake.disp <- reactive({return(eval(parse(text = filt("green.lake"))))})
+  queen.anne.disp <- reactive({return(eval(parse(text = filt("queen.anne"))))})
+  magnolia.disp <- reactive({return(eval(parse(text = filt("magnolia"))))})
+  maple.leaf.disp <- reactive({return(eval(parse(text = filt("maple.leaf"))))})
+  capitol.hill.disp <- reactive({return(eval(parse(text = filt("capitol.hill"))))})
+  
+  filt <- function(city){
+    str <- sprintf("%s.data", city)
+    str <- paste(str, "%>%", "filter(TRUE")
+    if(!is.null(input$inattention)) {
+      str <- paste(str, "& INATTENTIONIND %in% input$inattention")
+    }
+    if(input$year == TRUE){
+      str <- paste(str, "& YEAR > input$year.slider[1] & YEAR < input$year.slider[2]")
+    }
+    if(input$hour == TRUE){
+      str <- paste(str, "& HOUR > input$hour.slider[1] & HOUR < input$hour.slider[2]")
+    }
+    if(input$weather != "All"){str <- paste(str, "& WEATHER == input$weather")}
+    if(input$roadcond != "All"){str <- paste(str, "& ROADCOND == input$roadcond")}
+    if(input$lightcond != "All"){str <- paste(str, "& LIGHTCOND == input$lightcond")}
+    str <- paste0(str, ")")
+    return(str)
+  }
+  
+  #compute diameter of circle based on area (w/ magnitude adjustment)
+  computeDiameter <- function(area){ return(sqrt(area/pi)*2*13) }
   
   clicks <- reactiveValues(map.click = NULL, shape.click = NULL)
   
