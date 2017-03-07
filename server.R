@@ -109,10 +109,11 @@ shinyServer(function(input, output)  {
     content <- as.character(tagList(
       tags$h4("Location: ", selectedCollision$LOCATION),
       tags$h5("Number of collisions at this location: ", tags$em(nrow(selectedCollisions))),
-      tags$strong("Collision Type: "), tags$em(selectedCollision$COLLISIONTYPE), tags$br(),
-      tags$strong("SDOT description: "), tags$em(selectedCollision$SDOT_COLDESC), tags$br(),
-      tags$strong("Number of people: "), tags$em(selectedCollision$PERSONCOUNT), tags$br(),
-      tags$strong("Number of injuries: "), tags$em(selectedCollision$INJURIES)
+      tags$strong(sprintf("Collision on %1$s at %2$s:", selectedCollision$DATE, selectedCollision$TIME)), tags$br(),
+      tags$strong("Description: "), tags$em(selectedCollision$SDOT_COLDESC), tags$br(),
+      tags$strong("People involved: "), tags$em(selectedCollision$PERSONCOUNT), tags$br(),
+      tags$strong("Injuries: "), tags$em(selectedCollision$INJURIES), tags$br(),
+      tags$strong("Fatalities: "), tags$em(selectedCollision$FATALITIES)
     ))
     leafletProxy("map") %>% addPopups(lng, lat, content)
   }

@@ -23,9 +23,9 @@ year <- as.numeric(sapply(strsplit(date, split="/"), "[", 3))
 
 collision.data <- mutate(collision.data, "Latitude" = lat, "Longitude" = lng, "YEAR" = year, "DATE" = date,
                          "TIME" = time, "HOUR" = hour, "TIME_OF_DAY" = time.of.day) %>% 
-  select(COLLISIONTYPE, FATALITIES, INATTENTIONIND, INJURIES, LIGHTCOND, LOCATION, PERSONCOUNT,
-         ROADCOND, SDOT_COLDESC, SEVERITYCODE, SEVERITYDESC, ST_COLDESC, UNDERINFL,
-         VEHCOUNT, WEATHER, Latitude, Longitude, DATE, YEAR, TIME, HOUR, TIME_OF_DAY)
+  select(FATALITIES, INATTENTIONIND, INJURIES, LIGHTCOND, LOCATION, PERSONCOUNT,
+         ROADCOND, SDOT_COLDESC, SEVERITYCODE, SEVERITYDESC, WEATHER, Latitude, 
+         Longitude, DATE, YEAR, TIME, HOUR, TIME_OF_DAY)
   
 collision.data <- na.omit(collision.data)
 
