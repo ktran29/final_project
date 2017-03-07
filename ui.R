@@ -27,7 +27,10 @@ shinyUI(
                 2b = Serious Injury, 3 = Fatality"),
              h5("Scroll over each bar color to get more details. You can also zoom in by
                 dragging over a certain area. Double click to return to the original
-                viewing size."), plotlyOutput("plot"))
+                viewing size."), plotlyOutput("plot"),
+             selectInput("conditions", "Sort Collisions By:", c("Road Conditions" = "ROADCOND",
+                                                                "Weather" = "WEATHER",
+                                                                "Light Conditions" = "LIGHTCOND")))
   )
 )
 
