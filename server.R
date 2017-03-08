@@ -1,11 +1,10 @@
 library(shiny)
 library(leaflet)
 
-source('./data.R')
-
 shinyServer(function(input, output)  {
   
   output$map <- renderLeaflet({
+    
     map <- leaflet() %>% 
       addTiles() %>% 
       addCircles(neighborhood.lng, neighborhood.lat, 
