@@ -1,21 +1,57 @@
 library(shiny)
 library(leaflet)
+library(plotly)
+
+source('./data.R')
 
 shinyUI(
-  navbarPage("Seattle Collisions in the Last 10 Years", id = "nav",
-             tabPanel("Map",
-                      leafletOutput("map"),
-                      checkboxGroupInput("inattention", "Inattentive Driving", c("Yes" = "yes", "No" = "no"), c("yes", "no")),
-                      checkboxInput("year", "Sort By Year", FALSE)
-             ),
-             tabPanel("Chart"),
-             tabPanel("About", 
-                      "The presentation deals with the dataset obtained from the Seattle Department of Transportation (https://data.seattle.gov/Transportation/SDOT-Collisions/v7k9-7dn4/data). 
-                       This dataset consists of an annual traffic report on the locations and attributes of collisions that occur within Seattle.
-                       For our presentation, we will be focusing om the U-District region in Seattle. We will compare the frequency of accidents in each sub-region of the U-District (Ballard, Phinney Ridge, Fremont, Greenwood, University District, Green Lake, Northgate, Magnolia, Queen Anne, Capitol Hill).
-
-                       The primary feature of the data application is a leaflet map containing data points with information on collisions, such as the collision type, the amount of injuries, and the amount of fatalities. The first layer of the map contains an overview with a circle representing each sub-region of the U-District. The size of the circle correspond to the number of collisions. Clicking on any circle would expand that sub-region with individual data points representing collisions at specific locations.
-                      
-                       The second feature is a stacked bar graph with a summarized view of the collision data. The graph would show the relationship between the number of collisions and the severity of the collisions as well as a specific condition the user can choose using the widget.")
+  fluidPage(
+    titlePanel("Seattle Traffic Collisions in the Last 10 Years"),
+    sidebarLayout(
+      sidebarPanel(
+        conditionalPanel(
+          condition = "input.tabs == 'leaflet'",
+          h3("Sort By:"),
+          sliderInput("year.slider", "Years", min(collision.data$YEAR), max(collision.data$YEAR), range(collision.data$YEAR), 1),
+          sliderInput("hour.slider", "Hours (24-hour Format)", min(collision.data$HOUR), max(collision.data$HOUR), range(collision.data$HOUR), 1),
+          checkboxGroupInput("inattention", "Driving Attention", c("Attentive" = "N", "Inattentive" = "Y"), c("Y", "N")),
+          selectInput("roadcond", "Road Condition",
+                      choices = c("All", "Dry", "Wet", "Snow/Slush", "Unknown", "Ice", "Sand/Mud/Dirt", "Other", "Oil", "Standing Water")
+          ),
+          selectInput("weather", "Weather",
+                      choices = c("All", "Clear or Partly Cloudy", "Overcast", "Raining", "Unknown", "Fog/Smog/Smoke", "Snowing", "Other", 
+                                  "Sleet/Hail/Freezing Rain", "Severe Crosswind", "Blowing Sand or Dirt or Snow")
+          ),
+          selectInput("lightcond", "Lighting",
+                      choices = c("All", "Daylight", "Dark - Street Lights On", "Dusk", "Dark - Street Lights Off", "Unknown", 
+                                  "Dawn", "Dark - No Street Lights", "Other")
+          )
+        ),
+        conditionalPanel(
+          condition = "input.tabs == 'plotly'",
+          selectInput("conditions", "Sort Collisions By:", 
+                      c("Road Conditions" = "ROADCOND", "Weather" = "WEATHER", "Light Conditions" = "LIGHTCOND"))
+        )
+      ),
+      mainPanel(
+        tabsetPanel(id = "tabs",
+          tabPanel("Map",
+                   value = "leaflet",
+                   leafletOutput("map")
+          ),
+          tabPanel("Chart",
+                   value = "plotly",
+                   h3("This visual displays the number of car crashes against the factor of your choosing using the tools 
+                      on the left: Road conditions, Weather, and Light Conditions and shows the severity of the crashes"),
+                   h5("SDOT Severity Key: 0 = Unknown, 1 = Prop Damage, 2 = Injury, 2b = Serious Injury, 3 = Fatality"),
+                   h5("Scroll over each bar color to get more details. You can also zoom in by dragging over a certain 
+                      area. Double click to return to the original viewing size."), 
+                   plotlyOutput("plot")
+          )
+        )
+      )
+    )
   )
 )
+
+
