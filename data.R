@@ -2,50 +2,52 @@ library(dplyr)
 library(ggplot2)
 library(plotly)
 
-collision.data <- read.csv("./SDOT_Collisions.csv", stringsAsFactors = FALSE)
-collision.data[collision.data==""] <- NA
-collision.data$INATTENTIONIND[is.na(collision.data$INATTENTIONIND)] <- "N" 
+# collision.data <- read.csv("./SDOT_Collisions.csv", stringsAsFactors = FALSE)
+# collision.data[collision.data==""] <- NA
+# collision.data$INATTENTIONIND[is.na(collision.data$INATTENTIONIND)] <- "N"
+# 
+# coordinates <- collision.data$Shape
+# lat <- sapply(strsplit(coordinates, split=", "), "[", 1)
+# lng <- sapply(strsplit(coordinates, split=", "), "[", 2)
+# lat <- gsub("\\(", "", lat)
+# lng <- gsub(")", "", lng)
+# lat <- signif(as.numeric(lat), 8)
+# lng <- signif(as.numeric(lng), 8)
+# 
+# date <- collision.data$INCDTTM
+# time <- sapply(strsplit(date, split=" "), "[", 2)
+# hour <- sapply(strsplit(time, split=":"), "[", 1)
+# time.of.day <- sapply(strsplit(date, split=" "), "[", 3)
+# date <- sapply(strsplit(date, split=" "), "[", 1)
+# year <- as.numeric(sapply(strsplit(date, split="/"), "[", 3))
+# 
+# collision.data <- mutate(collision.data, "Latitude" = lat, "Longitude" = lng, "YEAR" = year, "DATE" = date,
+#                          "TIME" = time, "HOUR" = hour, "TIME_OF_DAY" = time.of.day) %>%
+#   select(FATALITIES, INATTENTIONIND, INJURIES, LIGHTCOND, LOCATION, PERSONCOUNT,
+#          ROADCOND, SDOT_COLDESC, SEVERITYCODE, SEVERITYDESC, WEATHER, Latitude,
+#          Longitude, DATE, YEAR, TIME, HOUR, TIME_OF_DAY)
+# 
+# collision.data <- na.omit(collision.data)
+# 
+# hour <- as.numeric(collision.data$HOUR)
+# time.of.day <- (collision.data$TIME_OF_DAY)
+# time <- data.frame(time.of.day, hour, stringsAsFactors = FALSE)
+# 
+# time <- within(time, hour[time.of.day == "PM"] <- hour[time.of.day == "PM"] + 12)
+# time <- within(time, hour[hour == "24"] <- 0)
+# 
+# hour <- time$hour
+# minute <- sapply(strsplit(collision.data$TIME, split=":"), "[", 2)
+# time <- paste0(hour, ":", minute)
+# 
+# collision.data <- mutate(collision.data, "TIME" = time, "HOUR" = hour, "MINUTE" = minute) %>%
+#   filter(YEAR >= 2007)
+# 
+# write.csv(collision.data, "Filtered_SDOT_Collisions.csv")
 
-coordinates <- collision.data$Shape
-lat <- sapply(strsplit(coordinates, split=", "), "[", 1)
-lng <- sapply(strsplit(coordinates, split=", "), "[", 2)
-lat <- gsub("\\(", "", lat)
-lng <- gsub(")", "", lng)
-lat <- signif(as.numeric(lat), 8)
-lng <- signif(as.numeric(lng), 8)
-
-date <- collision.data$INCDTTM
-time <- sapply(strsplit(date, split=" "), "[", 2)
-hour <- sapply(strsplit(time, split=":"), "[", 1)
-time.of.day <- sapply(strsplit(date, split=" "), "[", 3)
-date <- sapply(strsplit(date, split=" "), "[", 1)
-year <- as.numeric(sapply(strsplit(date, split="/"), "[", 3))
-
-collision.data <- mutate(collision.data, "Latitude" = lat, "Longitude" = lng, "YEAR" = year, "DATE" = date,
-                         "TIME" = time, "HOUR" = hour, "TIME_OF_DAY" = time.of.day) %>% 
-  select(FATALITIES, INATTENTIONIND, INJURIES, LIGHTCOND, LOCATION, PERSONCOUNT,
-         ROADCOND, SDOT_COLDESC, SEVERITYCODE, SEVERITYDESC, WEATHER, Latitude, 
-         Longitude, DATE, YEAR, TIME, HOUR, TIME_OF_DAY)
-  
-collision.data <- na.omit(collision.data)
-
-hour <- as.numeric(collision.data$HOUR)
-time.of.day <- (collision.data$TIME_OF_DAY)
-time <- data.frame(time.of.day, hour, stringsAsFactors = FALSE)
-
-time <- within(time, hour[time.of.day == "PM"] <- hour[time.of.day == "PM"] + 12)
-time <- within(time, hour[hour == "24"] <- 0)
-
-hour <- time$hour
-minute <- sapply(strsplit(collision.data$TIME, split=":"), "[", 2)
-time <- paste0(hour, ":", minute)
-
-collision.data <- mutate(collision.data, "TIME" = time, "HOUR" = hour, "MINUTE" = minute) %>% 
-  filter(YEAR >= 2007)
-
-options(digits=16)
 
 
+collision.data <- read.csv("./Filtered_SDOT_Collisions.csv", stringsAsFactors = FALSE)
 
 ballard.limits <- list(upper.lng = -122.360702, upper.lat = 47.690566, lower.lng = -122.410012, lower.lat = 47.655839)
 phinney.ridge.limits <- list(upper.lng = -122.344423, upper.lat = 47.686954, lower.lng = -122.366053, lower.lat = 47.662190)
