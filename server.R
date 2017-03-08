@@ -9,11 +9,17 @@ shinyServer(function(input, output)  {
       addTiles() %>% 
       addCircles(neighborhood.lng, neighborhood.lat, 
                  c(computeDiameter(nrow(ballard.disp())), computeDiameter(nrow(phinney.ridge.disp())), 
-                   computeDiameter(nrow(fremont.disp())), computeDiameter(nrow(greenwood.disp())), 
-                   computeDiameter(nrow(university.district.disp())), computeDiameter(nrow(green.lake.disp())), 
-                   computeDiameter(nrow(maple.leaf.disp())), computeDiameter(nrow(magnolia.disp())),
-                   computeDiameter(nrow(queen.anne.disp())), computeDiameter(nrow(capitol.hill.disp())))
-                 , neighborhood, "Overview", FALSE, fillOpacity = 0.5) %>%
+                  computeDiameter(nrow(fremont.disp())), computeDiameter(nrow(greenwood.disp())), 
+                  computeDiameter(nrow(university.district.disp())), computeDiameter(nrow(green.lake.disp())), 
+                  computeDiameter(nrow(maple.leaf.disp())), computeDiameter(nrow(magnolia.disp())),
+                  computeDiameter(nrow(queen.anne.disp())), computeDiameter(nrow(capitol.hill.disp()))),
+                 neighborhood, "Overview", FALSE, fillOpacity = 0.5, label = paste("Number of collisions: ", 
+                   c(nrow(ballard.disp()), nrow(phinney.ridge.disp()), 
+                     nrow(fremont.disp()), nrow(greenwood.disp()), 
+                     nrow(university.district.disp()), nrow(green.lake.disp()), 
+                     nrow(maple.leaf.disp()), nrow(magnolia.disp()),
+                     nrow(queen.anne.disp()), nrow(capitol.hill.disp()))), 
+                 labelOptions = labelOptions(noHide = T)) %>%
       setView(-122.340098, 47.665702, 12)
     
     current.group <- "placeholder"
