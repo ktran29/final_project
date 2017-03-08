@@ -35,8 +35,28 @@ shinyServer(function(input, output)  {
   
 
   # MAKE A PLOT
+  
+  plot.filt <- reactive({
+    specific.plot <- switch(
+      input$location,
+      collision.data = collision.data,
+      ballard.data = ballard.data,
+      capitol.hill.data = capitol.hill.data,
+      fremont.data = fremont.data,
+      green.lake.data = green.lake.data,
+      greenwood.data = greenwood.data,
+      magnolia.data = magnolia.data,
+      maple.leaf.data = maple.leaf.data,
+      phinney.ridge.data = phinney.ridge.data,
+      queen.anne.data = queen.anne.data,
+      university.district.data = university.district.data
+    )
+    return(specific.plot)
+  })
+  
   output$plot <- renderPlotly({
-    p <- ggplot(data = collision.data, aes_string(x = input$conditions, fill = "SEVERITYCODE")) +
+    # position = "fill" inside the geom_bar
+    p <- ggplot(data = plot.filt(), aes_string(x = input$conditions, fill = "SEVERITYCODE")) +
       geom_bar() + 
       labs(title = "How Many Collisions and Their Severity for Certain Conditions",
            x = if(input$conditions == "ROADCOND") {"Road Conditions"} else if(input$conditions == "WEATHER"){"Weather"}
@@ -45,6 +65,16 @@ shinyServer(function(input, output)  {
     
     p <- plotly_build(p)
     return(p)
+  })
+  
+  output$plot2 <- renderPlot({
+    q <- ggplot(data = plot.filt(), aes_string(x = input$conditions, fill="SEVERITYCODE")) +
+      geom_bar(position = "fill") +
+      labs(title = "How Many Collisions and Their Severity for Certain Conditions",
+           x = if(input$conditions == "ROADCOND") {"Road Conditions"} else if(input$conditions == "WEATHER"){"Weather"}
+           else {"Light Conditions"},
+           y = "Percentage of Collisions")
+    return(q)
   })
 
   fremont.disp <- reactive({return(eval(parse(text = filt("fremont"))))})

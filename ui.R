@@ -30,7 +30,13 @@ shinyUI(
         conditionalPanel(
           condition = "input.tabs == 'plotly'",
           selectInput("conditions", "Sort Collisions By:", 
-                      c("Road Conditions" = "ROADCOND", "Weather" = "WEATHER", "Light Conditions" = "LIGHTCOND"))
+                      c("Road Conditions" = "ROADCOND", "Weather" = "WEATHER", "Light Conditions" = "LIGHTCOND")),
+          selectInput("location", "Look at data in:",
+                      c("All" = "collision.data",
+                        "Ballard" = "ballard.data", "Capitol Hill" = "capitol.hill.data", "Fremont" = "fremont.data",
+                        "Green Lake" = "green.lake.data", "Greenwood" = "greenwood.data", "Magnolia" = "magnolia.data",
+                        "Maple Leaf" = "maple.leaf.data", "Phinney Ridge" = "phinney.ridge.data", 
+                        "Queen Anne" = "queen.anne.data", "University District" = "university.district.data"))
         )
       ),
       mainPanel(
@@ -44,9 +50,12 @@ shinyUI(
                    h3("This visual displays the number of car crashes against the factor of your choosing using the tools 
                       on the left: Road conditions, Weather, and Light Conditions and shows the severity of the crashes"),
                    h5("SDOT Severity Key: 0 = Unknown, 1 = Prop Damage, 2 = Injury, 2b = Serious Injury, 3 = Fatality"),
-                   h5("Scroll over each bar color to get more details. You can also zoom in by dragging over a certain 
-                      area. Double click to return to the original viewing size."), 
-                   plotlyOutput("plot")
+                   tabsetPanel(id = "subtabs",
+                      tabPanel("Counts", plotlyOutput("plot"), 
+                               h5("Scroll over each bar color to get more details. You can also zoom in by dragging over a certain 
+                                area. Double click to return to the original viewing size.")),
+                      tabPanel("Ratios", plotOutput("plot2"))
+                  )
           )
         )
       )
