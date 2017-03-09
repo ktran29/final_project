@@ -1,6 +1,11 @@
+library(shiny)
+library(leaflet)
 library(dplyr)
 library(ggplot2)
 library(plotly)
+
+# Our process in deciding how we wanted to manipulate the data
+# We wrote the modified data set to a new csv to decrease the app load time
 
 # collision.data <- read.csv("./SDOT_Collisions.csv", stringsAsFactors = FALSE)
 # collision.data[collision.data==""] <- NA
@@ -46,9 +51,10 @@ library(plotly)
 # write.csv(collision.data, "Filtered_SDOT_Collisions.csv")
 
 
-
+# Reads in the modified data set csv file
 collision.data <- read.csv("./Filtered_SDOT_Collisions.csv", stringsAsFactors = FALSE)
 
+# Set the coordinate limits for the relevant Seattle neighborhoods
 ballard.limits <- list(upper.lng = -122.360702, upper.lat = 47.690566, lower.lng = -122.410012, lower.lat = 47.655839)
 phinney.ridge.limits <- list(upper.lng = -122.344423, upper.lat = 47.686954, lower.lng = -122.366053, lower.lat = 47.662190)
 fremont.limits <- list(upper.lng = -122.342510, upper.lat = 47.665045, lower.lng = -122.367444, lower.lat = 47.648536)
@@ -61,6 +67,7 @@ queen.anne.limits <- list(upper.lng = -122.356687, upper.lat = 47.644524, lower.
 capitol.hill.limits <- list(upper.lng = -122.318215, upper.lat = 47.629830, lower.lng = -122.321305, lower.lat = 47.621153)
 
 
+# Selects data sets for each neighborhood based on their latitude and longitude limits
 ballard.data <- collision.data %>% 
   filter(Longitude < ballard.limits$upper.lng & Longitude > ballard.limits$lower.lng) %>% 
   filter(Latitude < ballard.limits$upper.lat & Latitude > ballard.limits$lower.lat)
@@ -101,10 +108,13 @@ capitol.hill.data <- collision.data %>%
   filter(Longitude < capitol.hill.limits$upper.lng & Longitude > capitol.hill.limits$lower.lng) %>% 
   filter(Latitude < capitol.hill.limits$upper.lat & Latitude > capitol.hill.limits$lower.lat)
 
+# Sets the latitude and longitude for the center of the neighborhoods
 neighborhood.lng <- c(-122.385, -122.35438, -122.3499, -122.3553, -122.306158, -122.327778, 
                       -122.316873, -122.400833, -122.356944, -122.316456)
 neighborhood.lat <- c(47.677, 47.672139, 47.6505, 47.690612, 47.661427, 47.680278, 
                       47.695833, 47.650556, 47.637222, 47.622942)
+
+# Names of neighborhoods to be used in grouping data
 neighborhood <- c("Ballard", "Phinney Ridge", "Fremont", "Greenwood", "University District", "Green Lake", 
                   "Maple Leaf", "Magnolia", "Queen Anne", "Capitol Hill")
 
