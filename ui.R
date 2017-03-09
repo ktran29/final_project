@@ -50,7 +50,7 @@ shinyUI(
                       tabPanel("Counts", plotlyOutput("plotly"), 
                                h5("Scroll over each bar color to get more details. You can also zoom in by dragging over a certain 
                                 area. Double click to return to the original viewing size.")),
-                      tabPanel("Ratios", plotlyOutput("ggplot"))
+                      tabPanel("Ratios", plotOutput("ggplot"))
                   )
           )
         )
