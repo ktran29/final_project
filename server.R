@@ -82,7 +82,7 @@ shinyServer(function(input, output)  {
   
   # Function that shows collision information when a point is clicked
   showCollisionInfo <- function(name, lat, lng) {
-    neighborhood.data <- eval(parse(text = paste0(tolower(name), ".disp()")))
+    neighborhood.data <- eval(parse(text = paste0(gsub(" ", ".", tolower(name)), ".disp()")))
     selectedCollisions <- filter(neighborhood.data, Latitude == lat, Longitude == lng)
     selectedCollision <- sample_n(selectedCollisions, 1)
     content <- as.character(tagList(

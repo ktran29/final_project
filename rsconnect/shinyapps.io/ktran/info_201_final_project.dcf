@@ -1,0 +1,11 @@
+name: info_201_final_project
+title: INFO 201 Final Project
+account: ktran
+server: shinyapps.io
+appId: 162371
+bundleId: 739719
+url: https://ktran.shinyapps.io/info_201_final_project/
+when: 1489049906.59988
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: SDOT_Collisions.csv
