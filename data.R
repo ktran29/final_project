@@ -2,48 +2,48 @@ library(dplyr)
 library(ggplot2)
 library(plotly)
 
-collision.data <- read.csv("./SDOT_Collisions.csv", stringsAsFactors = FALSE)
-collision.data[collision.data==""] <- NA
-collision.data$INATTENTIONIND[is.na(collision.data$INATTENTIONIND)] <- "N"
-
-coordinates <- collision.data$Shape
-lat <- sapply(strsplit(coordinates, split=", "), "[", 1)
-lng <- sapply(strsplit(coordinates, split=", "), "[", 2)
-lat <- gsub("\\(", "", lat)
-lng <- gsub(")", "", lng)
-lat <- signif(as.numeric(lat), 8)
-lng <- signif(as.numeric(lng), 8)
-
-date <- collision.data$INCDTTM
-time <- sapply(strsplit(date, split=" "), "[", 2)
-hour <- sapply(strsplit(time, split=":"), "[", 1)
-time.of.day <- sapply(strsplit(date, split=" "), "[", 3)
-date <- sapply(strsplit(date, split=" "), "[", 1)
-year <- as.numeric(sapply(strsplit(date, split="/"), "[", 3))
-
-collision.data <- mutate(collision.data, "Latitude" = lat, "Longitude" = lng, "YEAR" = year, "DATE" = date,
-                         "TIME" = time, "HOUR" = hour, "TIME_OF_DAY" = time.of.day) %>%
-  select(FATALITIES, INATTENTIONIND, INJURIES, LIGHTCOND, LOCATION, PERSONCOUNT,
-         ROADCOND, SDOT_COLDESC, SEVERITYCODE, SEVERITYDESC, WEATHER, Latitude,
-         Longitude, DATE, YEAR, TIME, HOUR, TIME_OF_DAY)
-
-collision.data <- na.omit(collision.data)
-
-hour <- as.numeric(collision.data$HOUR)
-time.of.day <- (collision.data$TIME_OF_DAY)
-time <- data.frame(time.of.day, hour, stringsAsFactors = FALSE)
-
-time <- within(time, hour[time.of.day == "PM"] <- hour[time.of.day == "PM"] + 12)
-time <- within(time, hour[hour == "24"] <- 0)
-
-hour <- time$hour
-minute <- sapply(strsplit(collision.data$TIME, split=":"), "[", 2)
-time <- paste0(hour, ":", minute)
-
-collision.data <- mutate(collision.data, "TIME" = time, "HOUR" = hour, "MINUTE" = minute) %>%
-  filter(YEAR >= 2007)
-
-write.csv(collision.data, "Filtered_SDOT_Collisions.csv")
+# collision.data <- read.csv("./SDOT_Collisions.csv", stringsAsFactors = FALSE)
+# collision.data[collision.data==""] <- NA
+# collision.data$INATTENTIONIND[is.na(collision.data$INATTENTIONIND)] <- "N"
+# 
+# coordinates <- collision.data$Shape
+# lat <- sapply(strsplit(coordinates, split=", "), "[", 1)
+# lng <- sapply(strsplit(coordinates, split=", "), "[", 2)
+# lat <- gsub("\\(", "", lat)
+# lng <- gsub(")", "", lng)
+# lat <- signif(as.numeric(lat), 8)
+# lng <- signif(as.numeric(lng), 8)
+# 
+# date <- collision.data$INCDTTM
+# time <- sapply(strsplit(date, split=" "), "[", 2)
+# hour <- sapply(strsplit(time, split=":"), "[", 1)
+# time.of.day <- sapply(strsplit(date, split=" "), "[", 3)
+# date <- sapply(strsplit(date, split=" "), "[", 1)
+# year <- as.numeric(sapply(strsplit(date, split="/"), "[", 3))
+# 
+# collision.data <- mutate(collision.data, "Latitude" = lat, "Longitude" = lng, "YEAR" = year, "DATE" = date,
+#                          "TIME" = time, "HOUR" = hour, "TIME_OF_DAY" = time.of.day) %>%
+#   select(FATALITIES, INATTENTIONIND, INJURIES, LIGHTCOND, LOCATION, PERSONCOUNT,
+#          ROADCOND, SDOT_COLDESC, SEVERITYCODE, SEVERITYDESC, WEATHER, Latitude,
+#          Longitude, DATE, YEAR, TIME, HOUR, TIME_OF_DAY)
+# 
+# collision.data <- na.omit(collision.data)
+# 
+# hour <- as.numeric(collision.data$HOUR)
+# time.of.day <- (collision.data$TIME_OF_DAY)
+# time <- data.frame(time.of.day, hour, stringsAsFactors = FALSE)
+# 
+# time <- within(time, hour[time.of.day == "PM"] <- hour[time.of.day == "PM"] + 12)
+# time <- within(time, hour[hour == "24"] <- 0)
+# 
+# hour <- time$hour
+# minute <- sapply(strsplit(collision.data$TIME, split=":"), "[", 2)
+# time <- paste0(hour, ":", minute)
+# 
+# collision.data <- mutate(collision.data, "TIME" = time, "HOUR" = hour, "MINUTE" = minute) %>%
+#   filter(YEAR >= 2007)
+# 
+# write.csv(collision.data, "Filtered_SDOT_Collisions.csv")
 
 
 
@@ -107,10 +107,4 @@ neighborhood.lat <- c(47.677, 47.672139, 47.6505, 47.690612, 47.661427, 47.68027
                       47.695833, 47.650556, 47.637222, 47.622942)
 neighborhood <- c("Ballard", "Phinney Ridge", "Fremont", "Greenwood", "University District", "Green Lake", 
                   "Maple Leaf", "Magnolia", "Queen Anne", "Capitol Hill")
-
-count <- c(nrow(ballard.data), nrow(phinney.ridge.data), nrow(fremont.data), nrow(greenwood.data),
-          nrow(university.district.data), nrow(green.lake.data), nrow(maple.leaf.data), nrow(magnolia.data),
-          nrow(queen.anne.data), nrow(capitol.hill.data))
-
-neighborhood.data <- data.frame(neighborhood, count)
 
